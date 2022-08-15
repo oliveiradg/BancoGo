@@ -1,19 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
 
-type ContaCorrente struct {
-	titular       string
-	numeroAgencia int
-	numeroConta   int
-	saldo         float64
+	"github.com/alura/banco/contas"
+)
+
+func PagarBoleto(conta verificarConta, valorDoBoleto float64) {
+	conta.Sacar(valorDoBoleto)
+}
+
+type verificarConta interface {
+	Sacar(valor float64) string
 }
 
 func main() {
-	contaDoJoao := ContaCorrente{titular: "João", numeroAgencia: 0001, numeroConta: 123456, saldo: 10000.0}
-	contaDaMonica := ContaCorrente{titular: "Monica", numeroAgencia: 221, numeroConta: 56789, saldo: 20000.0}
+	contaDoDenis := contas.ContaPoupanca{}
+	contaDoDenis.Depositar(100)
+	PagarBoleto(&contaDoDenis, 60)
 
-	fmt.Println(contaDoJoao)
-	fmt.Println(contaDaMonica)
-	
+	fmt.Println(contaDoDenis.ObterSaldo())
+
+	contaDaLuisa := contas.ContaCorrente{}
+	contaDaLuisa.Depositar(500)
+	PagarBoleto(&contaDaLuisa, 1000)
+
+	fmt.Println(contaDaLuisa.ObterSaldo())
+
 }
